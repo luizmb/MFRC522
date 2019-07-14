@@ -6,9 +6,9 @@ https://github.com/mxgxw/MFRC522-python
 Done:
 - MFRC522.py
 - Read.py
+- Dump.py
 
 Pending:
-- Dump.py
 - Write.py
 
 Tested on Raspberry Pi 3 running:
