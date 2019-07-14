@@ -416,6 +416,9 @@ class MFRC522 {
     }
 }
 
+
+
+
 import Foundation
 
 let group = DispatchGroup()
@@ -463,6 +466,9 @@ while true {
     // Select the scanned tag
     rc522.selectTag(serNum: uid)
 
+    /*
+    Read.py
+
     // Authenticate
     let statusAuth = rc522.auth(authMode: rc522.PICC_AUTHENT1A, blockAddr: 8, sectorkey: key, serNum: uid)
 
@@ -473,6 +479,14 @@ while true {
     } else {
         print("Authentication error")
     }
+    */
+
+    /*
+    Dump.py
+    */
+    rc522.dumpClassic1K(key: key, uid: uid)
+
+    rc522.stopCrypto()
 }
 
 dispatchMain()
