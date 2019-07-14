@@ -483,9 +483,49 @@ while true {
 
     /*
     Dump.py
-    */
+
     rc522.dumpClassic1K(key: key, uid: uid)
 
+    rc522.stopCrypto()
+    */
+
+    /*
+    Write.py
+    */
+    // Authenticate
+    let statusAuth = rc522.auth(authMode: rc522.PICC_AUTHENT1A, blockAddr: 8, sectorkey: key, serNum: uid)
+    print("\n")    
+
+    // Check if authenticated
+    if statusAuth != rc522.MI_OK {
+        print("Authentication error")
+        continue
+    }
+
+    print("Sector 8 looked like this:")
+    rc522.read(blockAddr: 8)
+    print("\n")
+
+    print("Sector 8 will now be filled with 0xFF:")
+    // Write the data
+    rc522.write(blockAddr: 8, writeData: Array(repeating: (0xFF as Byte), count: 16))
+    print("\n")
+
+    print("It now looks like this:")
+    // Check to see if it was written
+    rc522.read(blockAddr: 8)
+    print("\n")
+
+    print("Now we fill it with 0x00:")
+    rc522.write(blockAddr: 8, writeData: Array(repeating: (0x00 as Byte), count: 16))
+    print("\n")
+
+    print("It is now empty:")
+    // Check to see if it was written
+    rc522.read(blockAddr: 8)
+    print("\n")
+
+    // Stop    
     rc522.stopCrypto()
 }
 
