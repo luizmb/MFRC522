@@ -198,7 +198,7 @@ class MFRC522 {
             print("Error while reading!")
         }
         if backData.count == 16 {
-            print("Sector \(blockAddr) -> \(backData)")
+            print("Sector \(blockAddr) -> \(backData.map { String(format: "%02hhx", $0) }.joined(separator: ", "))")
         }
     }
 
@@ -483,15 +483,15 @@ while true {
 
     /*
     Dump.py
-
+    */
     rc522.dumpClassic1K(key: key, uid: uid)
 
     rc522.stopCrypto()
-    */
+
 
     /*
     Write.py
-    */
+
     // Authenticate
     let statusAuth = rc522.auth(authMode: rc522.PICC_AUTHENT1A, blockAddr: 8, sectorkey: key, serNum: uid)
     print("\n")    
@@ -527,6 +527,63 @@ while true {
 
     // Stop    
     rc522.stopCrypto()
+    */
+
+    /*
+    // Write NDEF
+    guard rc522.auth(authMode: rc522.PICC_AUTHENT1A, blockAddr: 4, sectorkey: key, serNum: uid) == rc522.MI_OK else {
+        print("Error reading block 4")
+        break
+    }
+
+    print("\nBlock 4 looked like this:")
+    rc522.read(blockAddr: 4)
+    print("\n")
+
+    print("Writing NDEF message to block 4")
+    rc522.write(blockAddr: 4, writeData: [0x00, 0x00, 0x03, 0x11, 0xD1, 0x01, 0x0D, 0x55, 0x01, 0x61, 0x64, 0x61, 0x66, 0x72, 0x75, 0x69])
+    print("\n")
+
+    print("It now looks like this:")
+    rc522.read(blockAddr: 4)
+    print("\n")
+
+    guard rc522.auth(authMode: rc522.PICC_AUTHENT1A, blockAddr: 5, sectorkey: key, serNum: uid) == rc522.MI_OK else {
+        print("Error reading block 5")
+        break
+    }
+
+    print("\nBlock 5 looked like this:")
+    rc522.read(blockAddr: 5)
+    print("\n")
+
+    print("Writing NDEF message to block 5")
+    rc522.write(blockAddr: 5, writeData: [0x74, 0x2E, 0x63, 0x6F, 0x6D, 0xFE, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00])
+    print("\n")
+
+    print("It now looks like this:")
+    rc522.read(blockAddr: 5)
+    print("\n")
+
+    guard rc522.auth(authMode: rc522.PICC_AUTHENT1A, blockAddr: 6, sectorkey: key, serNum: uid) == rc522.MI_OK else {
+        print("Error reading block 6")
+        break
+    }
+
+    print("\nBlock 6 looked like this:")
+    rc522.read(blockAddr: 6)
+    print("\n")
+
+    print("Writing NDEF message to block 6")
+    rc522.write(blockAddr: 6, writeData: Array(repeating: (0x00 as Byte), count: 16))
+    print("\n")
+
+    print("It now looks like this:")
+    rc522.read(blockAddr: 6)
+    print("\n")
+
+    rc522.stopCrypto()
+    */
 }
 
 dispatchMain()
